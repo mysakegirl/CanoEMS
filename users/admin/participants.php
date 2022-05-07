@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EVENT INFORMATION | ADMIN</title>
+    <title>Participants</title>
 
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
@@ -75,12 +75,12 @@
 
                                                 while ($row = $resultParticipant->fetch_assoc()) {
                                                     echo "
-                                                    <tr row-id='" . $row['participantId'] . "'>
+                                                    <tr row-name='" . $row['participantName'] . "' row-id='" . $row['participantId'] . "'>
                                                         <th scope='row'>" . $row['participantId'] . "</th>
-                                                        <td ref='" . $row['participantName'] . "'>" . $row['participantName'] . "</td>
+                                                        <td  ref='" . $row['participantName'] . "'>" . $row['participantName'] . "</td>
                                                         <td>
-                                                            <a href='/CanoEMS/users/admin/event.php?id=" . $row['participantId'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-edit'></i> Edit</a>
-                                                            <a href='/CanoEMS/users/admin/participants.php?id=" . $row['participantId'] . "' class='btn btn-danger m-1 pt-0 pb-0'><i class='fa fa-trash'></i> Delete</a>
+                                                            <button class='btn btn-primary m-1 pt-0 pb-0 btnEditParticipant'><i class='fa fa-edit'></i> Edit</button>
+                                                            <button class='btn btn-danger m-1 pt-0 pb-0 btnDeleteParticipant'><i class='fa fa-trash'></i> Delete</button>
                                                         </td>
                                                     </tr>";
                                                 }
@@ -133,6 +133,44 @@
                             </div>
                         </div>
                     </div>
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title textUserColor"><i class="fa fa-edit"> Edit Participant</i></h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <form>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="row">
+                                                            <div class="form-group col-sm-12">
+                                                                <input type="hidden" name="id" id="editid">
+                                                                <label for="title">PARTICIPANT NAME</label>
+                                                                <input type="text" class="form-control" id="editparticipantname" placeholder="Enter Name" autocomplete="off">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='fa fa-ban'></i> Cancel</button>
+                                    <button type="button" class="btn btn-info" id="editParticipant"><i class='fa fa-save'></i> <span class="btnSaveText">Edit</span></button>
+                           </div>
+                    </div>
+                </div>
+            </div>
+
 
     <script src="/CanoEMS/assets/js/jquery.min.js"></script>
     <script src="/CanoEMS/assets/js/bootstrap/js/bootstrap.min.js"></script>
@@ -207,7 +245,95 @@
                 }else{
                    alert('Fill up all fields!');
                 }
+            });
+
+            $(document).on("click", ".btnEditParticipant", function(e) {
+                $("#editModal").modal("show");
+                var id = e.target.closest("tr").getAttribute("row-id");
+                var name = e.target.closest("tr").getAttribute("row-name");
+                $('#editid').val(id);
+                $('#editparticipantname').val(name);
             })
+
+            $('#editParticipant').on('click', function(){
+                var id = $("#editid").val();
+                var participantName = $("#editparticipantname").val();
+                if(participantName.trim() != ""){
+                    var data = {};
+                        data = {
+                                "editParticipant":1,
+                                "editparticipantId": id,
+                                "editparticipantName": participantName
+                            };
+                        $.ajax({
+                            url: "/CanoEMS/methods/eventController.php",
+                            type: 'POST',
+                            data: data,
+                            success: function(response) {
+                                if (response.includes("Successfully")) {
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: response,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 1000)
+                                } else {
+                                    Swal.fire('No changes has been done');
+                                }
+                            }
+                        });
+                }else{
+                    alert('Fill up all fields!');
+                }
+            });
+
+            $(document).on("click", ".btnDeleteParticipant", function(e) {
+                var id = e.target.closest("tr").getAttribute("row-id");
+                var name = e.target.closest("tr").getAttribute("row-name");
+                var data = {};
+                        data = {
+                                "deleteParticipant":1,
+                                "deleteparticipantId": id,
+                            };
+                Swal.fire({
+                    title: 'Are you sure to delete '+name+'?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/CanoEMS/methods/eventController.php",
+                            type: 'POST',
+                            data: data,
+                            success: function(response) {
+                                if (response.includes("Successfully")) {
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: response,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 1000)
+                                } else {
+                                    Swal.fire('No changes has been done');
+                                }
+                            }
+                        });
+                    }
+                    });
+            })
+
             $(".loading").hide();
         });
     </script>
