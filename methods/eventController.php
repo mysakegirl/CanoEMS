@@ -56,3 +56,21 @@ if (isset($_POST['update'])) {
     }
     // exit();
 }
+
+
+if (isset($_POST['addParticipant'])) {
+    $event_id = $_POST['eventId'];
+    $participantName  = $_POST['participantName'];
+    
+    mysqli_query($db, "UPDATE `tblevent` SET `title`='" . $title . "',`time`='" . $time . "',`date`='" . $date . "',`location`='" . $location . "',`guest`='" . $guest . "' WHERE event_id = " . $event_id);
+    
+    mysqli_query($db, "INSERT INTO `tblparticipants`(`eventId`, `participantName`) VALUES 
+    ('" . $event_id . "','" . $participantName . "')");
+    
+    if (mysqli_affected_rows($db) > 0) {
+        echo "Successfully added participant";
+    } else {
+        echo mysqli_error($db);
+    }
+    // exit();
+}

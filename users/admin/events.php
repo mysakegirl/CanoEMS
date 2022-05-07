@@ -51,7 +51,7 @@
                                             <h4 class="textUserColor"><i class="fa fa-tasks"></i>&nbsp; EVENTS</h4>
                                         </div>
                                         <div class="col-sm-4">
-                                            <button class="btn btn-success float-right mb-2" id="addNew"><i class='fa fa-plus'></i> Add New Event</button>
+                                            <!-- <button class="btn btn-success float-right mb-2" id="addNew"><i class='fa fa-plus'></i> Add New Event</button> -->
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -80,12 +80,12 @@
                                                     <td ref='" . $row['venue'] . "'>" . $row['venue'] . "</td>
                                                     <td ref='" . $row['event_title'] . "'>" . $row['event_title'] . "</td>
                                                     <td>
-                                                        <a href='/CanoEMS/users/admin/event.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-search'></i> View</a>
+                                                        <a href='/CanoEMS/users/admin/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a>
                                                     </td>
                                                 </tr>";
                                                 }
-
                                                 ?>
+                                                        <!-- <a href='/CanoEMS/users/admin/event.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-search'></i> Info</a> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -225,10 +225,6 @@
             });
 
             var table = $('#tbl').removeAttr('width').DataTable({
-                columnDefs: [{
-                    width: 200,
-                    targets: 2
-                }],
                 fixedColumns: true
             });
 
