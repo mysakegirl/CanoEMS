@@ -81,6 +81,7 @@
                                                     <td ref='" . $row['event_title'] . "'>" . $row['event_title'] . "</td>
                                                     <td>
                                                         <a href='/CanoEMS/users/admin/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a>
+                                                        <a href='/CanoEMS/users/admin/attendance.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
                                                     </td>
                                                 </tr>";
                                                 }
