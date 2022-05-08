@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
 
-    <link rel="icon" href="/CanoEMS/assets/img/icon.png" type="image/gif">
+    <link rel="icon" href="/CanoEMS/assets/img/mainiconlogo.jpg" type="image/gif">
     <link rel="stylesheet" href="/CanoEMS/assets/css/nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -41,12 +41,13 @@
     $resultEventUpcoming = mysqli_query($db, "SELECT * FROM `tblevent` where convert(date, date) > CURRENT_DATE()");
     ?>
     <div class="wrapper">
-        <div class="content w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <?php include($path . "/CanoEMS/comp/taNavBar.php") ?>
+        <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
+            <?php include($path . "/CanoEMS/comp/taNavBar.php") ?>
+        </nav>
+        <div class="content w-100 backgroundDarkerColor">
+            <nav class="navbar navbar-expand-lg backgroundDarkColor">
+                <?php include($path . "/CanoEMS/comp/taCommonNavBar.php") ?>
             </nav>
-            <div class="wrapper">
-        <div class="content w-100">
             <div class="container-fluid">
                 <div class="content-wrapper p-0">
                     <div class="row">

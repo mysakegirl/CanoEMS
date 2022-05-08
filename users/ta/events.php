@@ -10,13 +10,20 @@
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
 
-    <link rel="icon" href="/CanoEMS/assets/img/icon.png" type="image/gif">
+    <link rel="icon" href="/CanoEMS/assets/img/mainiconlogo.jpg" type="image/gif">
     <link rel="stylesheet" href="/CanoEMS/assets/css/nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         #tbl_filter,
         #tbl_paginate {
             float: right !important;
+        }
+        .content-wrapper {
+            height: 110vh !important;
+        }
+
+        #v {
+            width: 100% !important;
         }
     </style>
 </head>
@@ -36,9 +43,12 @@
 
     ?>
     <div class="wrapper">
-        <div class="content w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
-                <?php include($path . "/CanoEMS/comp/taNavBar.php") ?>
+        <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
+            <?php include($path . "/CanoEMS/comp/taNavBar.php") ?>
+        </nav>
+        <div class="content w-100 backgroundDarkerColor">
+            <nav class="navbar navbar-expand-lg backgroundDarkColor">
+                <?php include($path . "/CanoEMS/comp/taCommonNavBar.php") ?>
             </nav>
             <div class="container-fluid">
                 <div class="content-wrapper p-0">
@@ -51,7 +61,7 @@
                                             <h4 class="textUserColor"><i class="fa fa-tasks"></i>&nbsp; MANAGE EVENTS</h4>
                                         </div>
                                         <div class="col-sm-4">
-                                            <button class="btn btn-success float-right mb-2" id="addNew"><i class='fa fa-plus'></i> Add New Event</button>
+                                            <!-- <button class="btn btn-success float-right mb-2" id="addNew"><i class='fa fa-plus'></i> Add New Event</button> -->
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -71,7 +81,7 @@
                                             <?php
                                                 while ($row = $result->fetch_assoc()) {
                                                     echo "
-                                                <tr row-id='" . $row['event_id'] . "'>
+                                                    <tr row-id='" . $row['event_id'] . "'>
                                                     <th scope='row'>" . $row['event_id'] . "</th>
                                                     <td ref='" . $row['event_name'] . "'>" . $row['event_name'] . "</td>
                                                     <td ref='" . $row['date'] . "'>" . $row['date'] . "</td>
@@ -79,7 +89,9 @@
                                                     <td ref='" . $row['venue'] . "'>" . $row['venue'] . "</td>
                                                     <td ref='" . $row['event_title'] . "'>" . $row['event_title'] . "</td>
                                                     <td>
-                                                        <a href='/CanoEMS/users/ta/event.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-search'></i> View</a>
+                                                        <a href='/CanoEMS/users/ta/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a>
+                                                        <a href='/CanoEMS/users/ta/attendance.php?id=" . $row['event_id'] . "' class='btn btn-success m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
+                                                        <a href='/CanoEMS/users/ta/report.php?id=" . $row['event_id'] . "' class='btn btn-warning text-white m-1 pt-0 pb-0'><i class='fa fa-bar-chart'></i> Report</a>
                                                     </td>
                                                 </tr>";
                                                 }

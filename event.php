@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
 
-    <link rel="icon" href="/CanoEMS/assets/img/icon.jpeg" type="image/gif">
+    <link rel="icon" href="/CanoEMS/assets/img/mainiconlogo.jpg" type="image/gif">
     <style>
         #tbl_filter,
         #tbl_paginate {

@@ -1,4 +1,4 @@
-<div class="collapse navbar-collapse " id="navbarNav">
+<!-- <div class="collapse navbar-collapse " id="navbarNav">
   <a class="navbar-brand" href="/CanoEMS/users/ta/"><i class="fa fa-calendar-check-o">&nbsp;EMS</i></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -20,6 +20,14 @@
         </li>
     </ul>
     
-</div>
+</div> -->
 
-<!-- <p class="fixed-bottom text-center m-0">Copyright ©2021 EVENT MANAGEMENT SYSTEM USING QR CODE.</p> -->
+
+<div class="sidebar-header backgroundDarkColor text-center">
+    <img src="/CanoEMS/assets/img/mainlogo.png" alt="icon" style="width:180px;">
+</div>
+<ul class="list-unstyled components">
+    <h5 class="mx-2 my-3 textLightAsh">MENUS</h5>
+    <li> <a href="/CanoEMS/users/ta"><i class='fa fa-home textUserColor'></i> &nbsp;&nbsp;HOME</a> </li>
+    <li> <a href="/CanoEMS/users/ta/events.php"><i class='fa fa-calendar textUserColor'></i> &nbsp;&nbsp;EVENTS</a> </li>
+</ul>

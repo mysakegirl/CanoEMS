@@ -10,13 +10,20 @@
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
 
-    <link rel="icon" href="/CanoEMS/assets/img/icon.png" type="image/gif">
+    <link rel="icon" href="/CanoEMS/assets/img/mainiconlogo.jpg" type="image/gif">
     <link rel="stylesheet" href="/CanoEMS/assets/css/nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         #tbl_filter,
         #tbl_paginate {
             float: right !important;
+        }
+        .content-wrapper {
+            height: 100vh !important;
+        }
+
+        #v {
+            width: 100% !important;
         }
     </style>
 </head>
@@ -37,13 +44,16 @@
     $result = mysqli_query($db, "SELECT * FROM `tblevent` where event_id = " . $event_id);
     $resultEvent = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    $resultParticipant = mysqli_query($db, "SELECT * FROM `tblparticipants` where eventId = " . $event_id);
+    $resultParticipant = mysqli_query($db, "SELECT * FROM `tblparticipants` where isDeleted = '0' AND eventId = " . $event_id);
 
     ?>
     <div class="wrapper">
-        <div class="content w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
-                <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
+            <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        </nav>
+        <div class="content w-100 backgroundDarkerColor">
+            <nav class="navbar navbar-expand-lg backgroundDarkColor">
+                <?php include($path . "/CanoEMS/comp/commonNavBar.php") ?>
             </nav>
             <div class="container-fluid">
                 <div class="content-wrapper p-0">
@@ -66,6 +76,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
+                                                    <th>PARTICIPANT CODE</th>
                                                     <th>PARTICIPANT NAME</th>
                                                     <th>ACTION</th>
                                                 </tr>
@@ -77,6 +88,7 @@
                                                     echo "
                                                     <tr row-name='" . $row['participantName'] . "' row-id='" . $row['participantId'] . "'>
                                                         <th scope='row'>" . $row['participantId'] . "</th>
+                                                        <td  ref='" . $row['participantCode'] . "'>" . $row['participantCode'] . "</td>
                                                         <td  ref='" . $row['participantName'] . "'>" . $row['participantName'] . "</td>
                                                         <td>
                                                             <button class='btn btn-primary m-1 pt-0 pb-0 btnEditParticipant'><i class='fa fa-edit'></i> Edit</button>

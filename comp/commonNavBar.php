@@ -4,13 +4,18 @@
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button> -->
-<div class="collapse navbar-collapse " id="navbarNav">
-  <a class="navbar-brand" href="#"><i class="fa">EMS</i></a>
+<!--ab0508 -->
+<div class="collapse navbar-collapse" id="navbarNav">
+    <button type="button" id="sidebarCollapse" class="btn backgroundUserColor p-1">
+        <!-- <h4 style="height: 100%; width: auto" class="m-0">≡</h4> -->
+        <i class="fa fa-bars textLightAsh"></i>
+    </button>
+  <!-- <a class="navbar-brand" href="#"><i class="fa">EMS</i></a> -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
     <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
+        <!-- <li class="nav-item dropdown">
                 <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 MANAGE <i class='fa fa-angle-down'></i>
                 </a>
@@ -18,10 +23,10 @@
                 <a class="dropdown-item" href="/CanoEMS/users/admin/users.php"><i class='fa fa-users'></i> USERS</a> 
                 <a class="dropdown-item" href="/CanoEMS/users/admin/events.php"><i class='fa fa-calendar'></i> EVENTS</a>
             </div>
-        </li>
+        </li> -->
         <li class="nav-item dropdown">
                 <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class='fa fa-cog'></i>
+                <i class='fa fa-cog textUserColor'></i>
                 </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <!-- <a class="nav-link dropdown-item" id="cur_user" cur-user-id="<?= $_SESSION['user-ems']['UserID'] ?>" title="View Profile" href="/EMSv2/profile.php"><b><i class='fa fa-user'></i> <?php print_r(strtoupper($_SESSION['user-ems']['fname'])); ?> <?php print_r(strtoupper($_SESSION['user-ems']['lname'])); ?></b></a> -->
@@ -31,7 +36,7 @@
             </div>
         </li>
     </ul>
-    
+
 </div>
 
 <style>

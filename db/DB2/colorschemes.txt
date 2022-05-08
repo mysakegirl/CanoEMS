@@ -1,4 +1,4 @@
 #7367F0 - lighter purple
 #283046 - dark
 #161D31 - darker than black
-#6B60E0 - for dark text
+#5D62EC- for dark text
