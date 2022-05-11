@@ -62,9 +62,20 @@ if (isset($_POST['addParticipant'])) {
     $event_id = $_POST['eventId'];
     $participantName  = $_POST['participantName'];
     
-    mysqli_query($db, "INSERT INTO `tblparticipants`(`eventId`, `participantName`) VALUES 
-    ('" . $event_id . "','" . $participantName . "')");
-    
+    $result=mysqli_query($db,"SELECT count(*) as total from tblparticipants WHERE eventId = " . $event_id);
+    $data=mysqli_fetch_assoc($result);
+    $participantCode = '';
+    if($data['total'] < 10){
+        $participantCode = 'EMS'.$event_id.'000'.$data['total']+1;
+    }else if($data['total'] > 9 && $data['total'] < 100){
+        $participantCode = 'EMS'.$event_id.'00'.$data['total']+1;
+    }else{
+        $participantCode = 'EMS'.$event_id.'0'.$data['total']+1;
+    }
+
+    mysqli_query($db, "INSERT INTO `tblparticipants`(`eventId`, `participantName`,`participantCode`) VALUES 
+    ('" . $event_id . "','" . $participantName . "','" . $participantCode . "')");
+
     if (mysqli_affected_rows($db) > 0) {
         echo "Successfully added participant";
     } else {
@@ -91,10 +102,75 @@ if (isset($_POST['editParticipant'])) {
 if (isset($_POST['deleteParticipant'])) {
     $deleteparticipantId = $_POST['deleteparticipantId'];
     
-    mysqli_query($db, "DELETE FROM `tblparticipants` WHERE participantId = " . $deleteparticipantId);
+    mysqli_query($db, "UPDATE `tblparticipants` SET `isDeleted`='0' WHERE participantId = " . $deleteparticipantId);
 
     if (mysqli_affected_rows($db) > 0) {
         echo "Successfully edited participant";
+    } else {
+        echo mysqli_error($db);
+    }
+    // exit();
+}
+
+if (isset($_POST['searchParticipant'])) {
+
+    $event_id = $_POST['eventId'];
+    $searchParticipantCodeName  = $_POST['pCodeName'];
+    $tableHeader = '<div class="resultDiv"><table class="table">';
+    $tableFooter = '</table></div>';
+    $searchResult = $tableHeader;
+
+   $SearchCodeResult =  mysqli_query($db, "SELECT * FROM `tblparticipants` WHERE participantCode LIKE '%".$searchParticipantCodeName."%' AND isDeleted = 0 AND eventId = " . $event_id);
+
+    if (mysqli_affected_rows($db) > 0) {
+        $searchResult.='<tr class="text-white"><th>P-Id</th>th>P-Code</th>th>P-Name</th><th>Action</th></tr>';
+        while ($row = $SearchCodeResult->fetch_assoc()) {
+            $searchResult .= "
+            <tr row-name='" . $row['participantName'] . "' row-id='" . $row['participantId'] . "'>
+                <th scope='row'>" . $row['participantId'] . "</th>
+                <td  ref='" . $row['participantCode'] . "'>" . $row['participantCode'] . "</td>
+                <td  ref='" . $row['participantName'] . "'>" . $row['participantName'] . "</td>
+                <td>
+                    <button class='btn btn-primary m-1 pt-0 pb-0 btnEditParticipant'><i class='fa fa-clock'></i> Clock In</button>
+                </td>
+            </tr>";
+        }
+
+    } else{
+        $SearchNameResult = mysqli_query($db, "SELECT * FROM `tblparticipants` WHERE participantName LIKE '%".$searchParticipantCodeName."%' AND isDeleted = 0 AND eventId = " . $event_id);
+        if (mysqli_affected_rows($db) > 0) {
+            $searchResult.='<tr class="text-white"><th>P-Id</th><th>P-Code</th><th>P-Name</th><th>Action</th></tr>';
+            while ($row = $SearchNameResult->fetch_assoc()) {
+                $searchResult .= "
+                <tr row-id='" . $row['participantId'] . "'>
+                    <th scope='row'>" . $row['participantId'] . "</th>
+                    <td  ref='" . $row['participantCode'] . "'>" . $row['participantCode'] . "</td>
+                    <td  ref='" . $row['participantName'] . "'>" . $row['participantName'] . "</td>
+                    <td>
+                        <button class='btn btn-primary m-1 pt-0 pb-0 btnClockIn'><i class='fa fa-clock'></i> Clock In</button>
+                    </td>
+                </tr>";
+            }
+        }else{
+            $searchResult .= '<tr><h3>No participants found</h3></tr>'.$tableFooter;
+        }
+        // echo mysqli_error($db);
+    }
+    echo $searchResult;
+}
+
+
+
+if (isset($_POST['participantClockIn'])) {
+    $participantId = $_POST['participantId'];
+    $eventId = $_POST['eventId'];
+    $clockedIn = $_POST['clockIn'];
+
+    mysqli_query($db, "INSERT INTO `tblparticipantsattendance`(`participantId`, `eventId`, `ClockIn`) VALUES 
+    ('" . $participantId . "','" . $eventId . "',CURRENT_TIMESTAMP())");
+
+    if (mysqli_affected_rows($db) > 0) {
+        echo "Successfully clock in";
     } else {
         echo mysqli_error($db);
     }

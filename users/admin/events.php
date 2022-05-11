@@ -10,13 +10,20 @@
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
 
-    <link rel="icon" href="/CanoEMS/assets/img/icon.png" type="image/gif">
+    <link rel="icon" href="/CanoEMS/assets/img/mainiconlogo.jpg" type="image/gif">
     <link rel="stylesheet" href="/CanoEMS/assets/css/nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         #tbl_filter,
         #tbl_paginate {
             float: right !important;
+        }
+        .content-wrapper {
+            height: 110vh !important;
+        }
+
+        #v {
+            width: 100% !important;
         }
     </style>
 </head>
@@ -36,15 +43,18 @@
 
     ?>
     <div class="wrapper">
-        <div class="content w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
-                <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
+            <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        </nav>
+        <div class="content w-100 backgroundDarkerColor">
+            <nav class="navbar navbar-expand-lg backgroundDarkColor">
+                <?php include($path . "/CanoEMS/comp/commonNavBar.php") ?>
             </nav>
             <div class="container-fluid">
                 <div class="content-wrapper p-0">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="card mb-5">
+                            <div class="card mb-5 ">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-8">
@@ -81,7 +91,8 @@
                                                     <td ref='" . $row['event_title'] . "'>" . $row['event_title'] . "</td>
                                                     <td>
                                                         <a href='/CanoEMS/users/admin/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a>
-                                                        <a href='/CanoEMS/users/admin/attendance.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
+                                                        <a href='/CanoEMS/users/admin/attendance.php?id=" . $row['event_id'] . "' class='btn btn-success m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
+                                                        <a href='/CanoEMS/users/admin/report.php?id=" . $row['event_id'] . "' class='btn btn-warning text-white m-1 pt-0 pb-0'><i class='fa fa-bar-chart'></i> Report</a>
                                                     </td>
                                                 </tr>";
                                                 }

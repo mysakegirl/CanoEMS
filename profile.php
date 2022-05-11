@@ -23,6 +23,13 @@ include_once($path . "/CanoEMS/db/config.php"); // configuration
         #tbl_paginate {
             float: right !important;
         }
+        .content-wrapper {
+            height: 100vh !important;
+        }
+
+        #v {
+            width: 100% !important;
+        }
     </style>
 </head>
 
@@ -40,13 +47,24 @@ include_once($path . "/CanoEMS/db/config.php"); // configuration
 
     ?>
     <div class="wrapper">
-        <div class="content w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
-                <?php 
+
+        <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
+            <?php 
                 if($_SESSION['user-ems']['UserType'] == "ADMIN"){
                      include($path . "/CanoEMS/comp/adminNavBar.php");
                 }else{
-
+                    include($path . "/CanoEMS/comp/taNavBar.php");
+                }
+                
+            ?>
+        </nav>
+        <div class="content w-100 backgroundDarkerColor">
+            <nav class="navbar navbar-expand-lg backgroundDarkColor">
+                <?php 
+                if($_SESSION['user-ems']['UserType'] == "ADMIN"){
+                     include($path . "/CanoEMS/comp/commonNavBar.php");
+                }else{
+                    include($path . "/CanoEMS/comp/taCommonNavBar.php");
                 }
                 
                 ?>
@@ -67,7 +85,7 @@ include_once($path . "/CanoEMS/db/config.php"); // configuration
                                                 <div class="col-sm-6">
                                                     <div class="row">
                                                         <div class="col-sm-12 mb-3">
-                                                            <h2 class="text-center">PROFILE <small><a href="javascript:void(0)" id="btnEdit" class="" title="Edit"><i class='fa fa-edit'></i></a></small></h2>
+                                                            <h2 class="text-center textUserColor">PROFILE <small><a href="javascript:void(0)" id="btnEdit" class="" title="Edit"><i class='fa fa-edit'></i></a></small></h2>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,6 +194,9 @@ include_once($path . "/CanoEMS/db/config.php"); // configuration
     <script>
         $(document).ready(function() {
         
+            $("#sidebarCollapse").on('click', function() {
+                $("#sidebar").toggleClass('active');
+            });
 
             $(document).on("click", "#btnEdit", function() {
                 $("#username, #fname, #s_question, #s_answer").removeAttr("disabled");

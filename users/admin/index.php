@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
 
-    <link rel="icon" href="/CanoEMS/assets/img/icon.png" type="image/gif">
+    <link rel="icon" href="/CanoEMS/assets/img/mainiconlogo.jpg" type="image/gif">
     <link rel="stylesheet" href="/CanoEMS/assets/css/nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -40,9 +40,12 @@
 
     ?>
     <div class="wrapper">
-        <div class="content w-100">
-            <nav class="navbar navbar-expand-md navbar-light bg-light">
-                <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
+            <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        </nav>
+        <div class="content w-100 backgroundDarkerColor">
+            <nav class="navbar navbar-expand-lg backgroundDarkColor">
+                <?php include($path . "/CanoEMS/comp/commonNavBar.php") ?>
             </nav>
             <div class="container-fluid">
                 <div class="content-wrapper p-0">
@@ -78,7 +81,7 @@
                                                     <td>" . $row['event_title'] . "</td>
                                                     <td>" . $row['venue'] . "</td>
                                                     <td>
-                                                    <a href='/CanoEMS/users/admin/event.php?id=" . $row['event_id'] . "' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a>
+                                                    <a href='/CanoEMS/users/admin/events.php' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a>
                                                     </td>
                                                 </tr>";
                                                         }
@@ -120,7 +123,7 @@
                                                     <td>" . $row['event_title'] . "</td>
                                                     <td>" . $row['venue'] . "</td>
                                                     <td>
-                                                    <a href='/CanoEMS/users/admin/event.php?id=" . $row['event_id'] . "' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a>
+                                                    <a href='/CanoEMS/users/admin/events.php' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a>
                                                     </td>
                                                 </tr>";
                                                         }
@@ -157,8 +160,13 @@
     <script>
         $(".loading").show();
         $(document).ready(function() {
+            $("#sidebarCollapse").on('click', function() {
+                $("#sidebar").toggleClass('active');
+            });
+
             $(".loading").hide();
         });
+    </script>
     </script>
 </body>
 

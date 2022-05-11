@@ -10,13 +10,20 @@
     <link rel="stylesheet" href="/CanoEMS/assets/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/CanoEMS/assets/css/index.css">
 
-    <link rel="icon" href="/CanoEMS/assets/img/icon.png" type="image/gif">
+    <link rel="icon" href="/CanoEMS/assets/img/mainiconlogo.jpg" type="image/gif">
     <link rel="stylesheet" href="/CanoEMS/assets/css/nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         #tbl_filter,
         #tbl_paginate {
             float: right !important;
+        }
+        .content-wrapper {
+            height: 100vh !important;
+        }
+
+        #v {
+            width: 100% !important;
         }
     </style>
 </head>
@@ -39,11 +46,16 @@
 
     $resultParticipant = mysqli_query($db, "SELECT * FROM `tblparticipants` where eventId = " . $event_id);
 
+    $resultAttendance = mysqli_query($db, "SELECT * FROM `tblparticipantsattendance` tpa INNER JOIN `tblparticipants` tp on tp.participantId = tpa.participantId  where tpa.eventId = " . $event_id);
+
     ?>
     <div class="wrapper">
-        <div class="content w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
-                <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
+            <?php include($path . "/CanoEMS/comp/adminNavBar.php") ?>
+        </nav>
+        <div class="content w-100 backgroundDarkerColor">
+            <nav class="navbar navbar-expand-lg backgroundDarkColor">
+                <?php include($path . "/CanoEMS/comp/commonNavBar.php") ?>
             </nav>
             <div class="container-fluid">
                 <div class="content-wrapper p-0">
@@ -51,32 +63,47 @@
                         <div class="col-sm-12">
                             <div class="card mb-5">
                                 <div class="card-body">
-                                <a class="btn btn-secondary btnBack mb-4" href="events.php"><i class='fa fa-arrow-left'></i> Back</a>&nbsp;
-                                <h3 class="textUserColor text-center"><i class="fa fa-clock-o"></i>&nbsp;<?php echo $resultEvent[0]["event_title"] ?> ATTENDANCE</h3><br>
+                                <!-- <a class="btn btn-secondary btnBack mb-4" href="events.php"><i class='fa fa-arrow-left'></i> Back</a>&nbsp; -->
+                                <h2 class="textUserColor text-center"><i class="fa fa-clock-o"></i>&nbsp;<?php echo $resultEvent[0]["event_title"] ?> ATTENDANCE</h2><br>
                                     <div class="row">
                                         <div class="col-md-7">
                                             <table class="table table-bordered" id="attendanceTbl">
                                                 <thead>
-                                                    <tr><td colspan="2"><h5 class="text-center">ATTENDANCE</h5></td></tr>
+                                                    <tr class="bg-info text-white"><td colspan="3"><h5 class="text-center">ATTENDANCE</h5></td></tr>
                                                     <tr>
-                                                        <td class="text-center">Name</td>
-                                                        <td class="text-center">Clock In</td>
+                                                        <th class="text-center">Name</th>
+                                                        <th class="text-center">Clock In</th>
                                                     </tr>
                                                 </thead>
+                                                <tbody>
+                                                <?php
+                                                        while ($rowz = $resultAttendance->fetch_assoc()) {
+                                                            echo "
+                                                        <tr>
+                                                            <td ref='" . $rowz['participantName'] . "'>" . $rowz['participantName'] . "</td>
+                                                            <td ref='" . $rowz['ClockIn'] . "'>" . $rowz['ClockIn'] . "</td>
+                                                        </tr>";
+                                                        }
+                                                        ?>
+                                                </tbody>
                                             </table>
                                         </div>
                                         <div class="col-md-5">
                                                 <div class="card text-white bg-info mb-3">
                                                     <div class="card-body">
-                                                        <h5 class="card-title text-center"><?= date("D M d, Y ") ?><span class="timer"></span></h5>
+                                                        <h5 class="card-title text-center"><span class="dateTdy"><?= date("D M d, Y ") ?></span><span class="timer"></span></h5>
                                                         <hr>
-                                                        <form id="attendance_form">
-                                                            <input type="text" class="form-control text-center" id="participant_id" placeholder="0" readonly>
-                                                            <label for="participant_id" class="text-center">Participant Id</label>
-                                                            <input type="text" class="form-control text-center" id="pname_autocomplete" placeholder="Search Participant...">
-                                                            <label for="pname_autocomplete" class="text-center">Participant Name</label>
-                                                            <input type="submit" value="Save Attendance" id="btnSave" class="btn btn-warning mt-2 w-100">
-                                                        </form>
+                                                        <div id="attendance_form">
+                                                            <div class="form-group">
+                                                                <input id="attendanceEventId" value="<?php echo $event_id; ?>" hidden>
+                                                               <input type="text" class="form-control text-center" id="pnameOrcode" placeholder="Search Participant Code or Name...">
+                                                            </div>
+                                                            <button id="btnSearch" class="btn btn-warning w-100"><i class="fa fa-search"></i> Search</button>
+                                                            <!-- <input type="button" value="Save Attendance" id="btnSave" class="btn btn-warning mt-2"> -->
+                                                        </div>
+                                                        <div class="my-3 text-center" id="attendancesearch_result">
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                         </div>
@@ -144,30 +171,69 @@
             $(".timer").text(currentTime);
         }, 1000);
 
-        $('#pname_autocomplete').autocomplete({source: function( request, response ) {
-        // Fetch data
-        $.ajax({
-            url: "fetchData.php",
-            type: 'post',
-            dataType: "json",
-            data: {
-                search: request.term
-            },
-            success: function( data ) {
-            response( data );
+        $('#btnSearch').on('click',function(){
+            var id = $('#attendanceEventId').val();
+            var sContent = $('#pnameOrcode').val();
+            $(".loading").show();
+
+            if(sContent.trim() != ""){
+                var data = {
+                    "searchParticipant": 1,
+                    "eventId": id,
+                    "pCodeName": sContent.trim()
+                };
+                $.ajax({
+                            url: "/CanoEMS/methods/eventController.php",
+                            type: 'POST',
+                            data: data,
+                            success: function(response) {
+                                // alert(response);
+                                $('.resultDiv').remove();
+                                $('#attendancesearch_result').append(response);
+                            }
+                        });
+            }else{
+                alert('Fill up all fields!');
             }
+
+         
         });
-        },select: function (event, ui) {
-            // Set selection
-            $('#pname_autocomplete').val(ui.item.label); // display the selected text
-            // $('#selectuser_id').val(ui.item.value); // save selected id to input
-            return false;
-        },
-        focus: function(event, ui){
-            $( "#pname_autocomplete" ).val( ui.item.label );
-            // $( "#selectuser_id" ).val( ui.item.value );
-            return false;
-        },
+
+        $(document).on("click", ".btnClockIn", function(e) {
+            $id = e.target.closest("tr").getAttribute("row-id");
+            var eventId = $('#attendanceEventId').val();
+            var datetdy = $('.dateTdy').text();
+            var getcurrentTime = getDateTime();
+            var dateStr = datetdy + getcurrentTime;
+
+            var data = {
+                    "participantClockIn": 1,
+                    "participantId": $id,
+                    "eventId": eventId,
+                    "clockIn": dateStr
+                };
+               $.ajax({
+                    url: "/CanoEMS/methods/eventController.php",
+                    type: 'POST',
+                    data: data,
+                    success: function(response) {
+                        if (response.includes("Successfully")) {
+                             Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: response,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            $('.resultDiv').remove();
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000)
+                        } else {
+                            alert(response);
+                        }
+                    }
+                });
         });
 
         $(".loading").hide();

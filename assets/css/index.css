@@ -11,3 +11,23 @@
 .backgroundUserColor{
     background-color: #7367F0 !important;
 }
+
+.textLighterPurp{
+    color:#7367F0  !important;
+}
+
+.textDarkPurp{
+    color:#5D62EC !important;
+}
+
+.textLightAsh{
+    color: #E2E2E2 !important;
+}
+
+.backgroundDarkColor {
+    background-color: #283046 !important;
+}
+
+.backgroundDarkerColor {
+    background-color: #161D31 !important;
+}
