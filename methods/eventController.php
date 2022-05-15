@@ -162,17 +162,40 @@ if (isset($_POST['searchParticipant'])) {
 
 
 if (isset($_POST['participantClockIn'])) {
-    $participantId = $_POST['participantId'];
+    $participantName = $_POST['participantName'];
     $eventId = $_POST['eventId'];
     $clockedIn = $_POST['clockIn'];
 
-    mysqli_query($db, "INSERT INTO `tblparticipantsattendance`(`participantId`, `eventId`, `ClockIn`) VALUES 
-    ('" . $participantId . "','" . $eventId . "',CURRENT_TIMESTAMP())");
+    $resultz = mysqli_query($db, "SELECT * FROM `tblevent` where event_id = " . $eventId);
+    $resultEvent = mysqli_fetch_all($resultz, MYSQLI_ASSOC);
+
+    if($resultEvent[0]['attendanceStatus'] == 'OPEN'){
+        mysqli_query($db, "INSERT INTO `tblparticipantsattendance`(`eventId`,`participantName`, `ClockIn`) VALUES 
+        ('" . $eventId . "','" . $participantName . "',CURRENT_TIMESTAMP())");
+    
+        if (mysqli_affected_rows($db) > 0) {
+            echo "Successfully clock in";
+        } else {
+            echo mysqli_error($db);
+        }
+    }else{
+        echo "closed";
+    }
+    // exit();
+}
+
+
+if (isset($_POST['attendanceStatusChange'])) {
+    $eventId = $_POST['eventId'];
+    $editAttendanceStatus = $_POST['editAttendanceStatus'];
+
+    mysqli_query($db, "UPDATE `tblevent` SET `attendanceStatus`='" . $editAttendanceStatus . "' WHERE event_id = " . $eventId);
 
     if (mysqli_affected_rows($db) > 0) {
-        echo "Successfully clock in";
+        echo "Successful";
     } else {
         echo mysqli_error($db);
     }
     // exit();
 }
+

@@ -44,10 +44,10 @@
     $result = mysqli_query($db, "SELECT * FROM `tblevent` where event_id = " . $event_id);
     $resultEvent = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    $resultParticipant = mysqli_query($db, "SELECT * FROM `tblparticipants` where eventId = " . $event_id);
-
-    $resultAttendance = mysqli_query($db, "SELECT * FROM `tblparticipantsattendance` tpa INNER JOIN `tblparticipants` tp on tp.participantId = tpa.participantId  where tpa.eventId = " . $event_id);
-
+    // $resultParticipant = mysqli_query($db, "SELECT * FROM `tblparticipants` where eventId = " . $event_id);
+    // $resultAttendance = mysqli_query($db, "SELECT * FROM `tblparticipantsattendance` tpa INNER JOIN `tblparticipants` tp on tp.participantId = tpa.participantId  where tpa.eventId = " . $event_id);
+   
+    $resultAttendance = mysqli_query($db, "SELECT * FROM `tblparticipantsattendance` where eventId = " . $event_id);
     ?>
     <div class="wrapper">
         <nav id="sidebar" class="backgroundDarkColor border-right border-dark">
@@ -91,18 +91,21 @@
                                         <div class="col-md-5">
                                                 <div class="card text-white bg-info mb-3">
                                                     <div class="card-body">
+                                                        <input id="attendanceStatusInput" value="<?php echo $resultEvent[0]["attendanceStatus"] ?>" hidden>
                                                         <h5 class="card-title text-center"><span class="dateTdy"><?= date("D M d, Y ") ?></span><span class="timer"></span></h5>
                                                         <hr>
                                                         <div id="attendance_form">
                                                             <div class="form-group">
                                                                 <input id="attendanceEventId" value="<?php echo $event_id; ?>" hidden>
-                                                               <input type="text" class="form-control text-center" id="pnameOrcode" placeholder="Search Participant Code or Name...">
+                                                               <input type="text" class="form-control text-center" id="inputParticipantName" placeholder="Enter Participant Name...">
                                                             </div>
-                                                            <button id="btnSearch" class="btn btn-warning w-100"><i class="fa fa-search"></i> Search</button>
-                                                            <!-- <input type="button" value="Save Attendance" id="btnSave" class="btn btn-warning mt-2"> -->
+                                                            <!-- <button id="btnSearch" class="btn btn-warning w-100"><i class="fa fa-search"></i> Search</button> -->
+                                                            <button id="btnSubmit" class="btn btn-warning w-100">Submit Attendance</button>
                                                         </div>
-                                                        <div class="my-3 text-center" id="attendancesearch_result">
-
+                                                        <div class="my-3 text-center" id="attendance_result">
+                                                            <h3 class="text-danger">
+                                                                The attendance for this event is officially closed. Contact the Administrator for changes.
+                                                            </h3>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -137,6 +140,14 @@
             $("#sidebarCollapse").on('click', function() {
                 $("#sidebar").toggleClass('active');
             });
+
+            if($('#attendanceStatusInput').val()=="OPEN"){
+                // $('#attendance_form').attr('hidden',false);
+                $('#attendance_result').attr('hidden',true);
+            }else{
+                // $('#attendance_form').attr('hidden',true);
+                $('#attendance_result').attr('hidden',false);
+            }
             
             var table = $('#tbl').removeAttr('width').DataTable({
                 fixedColumns: true
@@ -199,19 +210,23 @@
          
         });
 
-        $(document).on("click", ".btnClockIn", function(e) {
-            $id = e.target.closest("tr").getAttribute("row-id");
-            var eventId = $('#attendanceEventId').val();
+        $(document).on("click", "#btnSubmit", function(e) {
+            // $id = e.target.closest("tr").getAttribute("row-id");
+            // var eventId = $('#attendanceEventId').val();
+            var id = $('#attendanceEventId').val();
+            var inputPartcipantName = $('#inputParticipantName').val();
             var datetdy = $('.dateTdy').text();
             var getcurrentTime = getDateTime();
             var dateStr = datetdy + getcurrentTime;
 
             var data = {
                     "participantClockIn": 1,
-                    "participantId": $id,
-                    "eventId": eventId,
+                    "participantName": inputPartcipantName,
+                    "eventId": id,
                     "clockIn": dateStr
                 };
+
+            if(inputPartcipantName.trim() != ""){    
                $.ajax({
                     url: "/CanoEMS/methods/eventController.php",
                     type: 'POST',
@@ -225,17 +240,32 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             })
-                            $('.resultDiv').remove();
+                            // $('.resultDiv').remove();
                             setTimeout(function() {
                                 window.location.reload();
                             }, 1000)
-                        } else {
+                        }
+                        else if(response.includes("closed")){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Event Attendance is Closed',
+                                text: 'Please contact the administrator to reactivate it.',
+                            })
+                        } 
+                        else {
                             alert(response);
                         }
                     }
                 });
+            }
+            else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Empty',
+                    text: 'Please fill up all fields',
+                })
+            }
         });
-
         $(".loading").hide();
     });
     </script>

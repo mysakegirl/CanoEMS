@@ -82,7 +82,6 @@
                                                     <td>" . $row['event_title'] . "</td>
                                                     <td>" . $row['venue'] . "</td>
                                                     <td>
-                                                    <a href='/CanoEMS/users/ta/event.php?id=" . $row['event_id'] . "' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a>
                                                     </td>
                                                 </tr>";
                                                         }
@@ -93,6 +92,8 @@
                                                             </tr>";
                                                         }
                                                         ?>
+                                                    <!-- <a href='/CanoEMS/users/ta/event.php?id=" . $row['event_id'] . "' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a> -->
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -125,7 +126,7 @@
                                                     <td>" . $row['event_title'] . "</td>
                                                     <td>" . $row['venue'] . "</td>
                                                     <td>
-                                                    <a href='/CanoEMS/users/ta/event.php?id=" . $row['event_id'] . "' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a>
+                                                    <a href='/CanoEMS/attendance.php?id=" . $row['event_id'] . "' class='btn btn-primary' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
                                                     </td>
                                                 </tr>";
                                                         }
@@ -137,6 +138,8 @@
                                                 </tr>";
                                                         }
                                                         ?>
+                                                    <!-- <a href='/CanoEMS/users/ta/event.php?id=" . $row['event_id'] . "' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a> -->
+
                                             </tbody>
                                         </table>
                                     </div>

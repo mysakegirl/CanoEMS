@@ -44,7 +44,8 @@
     $result = mysqli_query($db, "SELECT * FROM `tblevent` where event_id = " . $event_id);
     $resultEvent = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    $resultAttendance = mysqli_query($db, "SELECT * FROM `tblparticipantsattendance` tpa INNER JOIN `tblparticipants` tp on tp.participantId = tpa.participantId  where tpa.eventId = " . $event_id);
+    // $resultAttendance = mysqli_query($db, "SELECT * FROM `tblparticipantsattendance` tpa INNER JOIN `tblparticipants` tp on tp.participantId = tpa.participantId  where tpa.eventId = " . $event_id);
+    $resultAttendance = mysqli_query($db, "SELECT * FROM `tblparticipantsattendance` where eventId = " . $event_id);
 
     ?>
     <div class="wrapper">

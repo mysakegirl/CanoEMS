@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2022 at 06:24 AM
+-- Generation Time: May 15, 2022 at 09:41 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -33,21 +33,22 @@ CREATE TABLE `tblevent` (
   `date` date NOT NULL,
   `venue` varchar(300) NOT NULL,
   `time` time NOT NULL,
-  `event_name` varchar(300) NOT NULL
+  `event_name` varchar(300) NOT NULL,
+  `attendanceStatus` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tblevent`
 --
 
-INSERT INTO `tblevent` (`event_id`, `event_title`, `date`, `venue`, `time`, `event_name`) VALUES
-(1, 'THE INTERNATIONAL 10', '2022-03-25', 'KATOWICE', '05:00:00', 'DOTA 2'),
-(2, 'DREAMHACK', '2022-03-24', 'BELGIUM', '08:20:00', 'DOTA 2'),
-(3, 'Beyond the Summit', '2022-03-25', 'Dubai', '09:00:00', 'DOTA 2'),
-(4, 'ACT GRADUATION 2022', '2022-06-15', 'ASIAN COLLEGE OF TECHNOLOGY', '05:49:00', 'ACT GRADUATION'),
-(5, 'ACT GRADUATION 2022', '2022-06-15', 'ASIAN COLLEGE OF TECHNOLOGY', '05:49:00', 'ACT GRADUATION'),
-(6, 'ACT GRADUATION PRACTICE', '2022-06-16', '10TH FLOOR', '21:03:00', 'ACT PRACTICE'),
-(9, 'GRADUATES RING HOP 2022', '2022-02-05', 'ACT 10TH FLOOR', '08:00:00', 'RING HOP');
+INSERT INTO `tblevent` (`event_id`, `event_title`, `date`, `venue`, `time`, `event_name`, `attendanceStatus`) VALUES
+(1, 'THE INTERNATIONAL 10', '2022-03-25', 'KATOWICE', '05:00:00', 'DOTA 2', 'CLOSED'),
+(2, 'DREAMHACK', '2022-03-24', 'BELGIUM', '08:20:00', 'DOTA 2', 'CLOSED'),
+(3, 'Beyond the Summit', '2022-03-25', 'Dubai', '09:00:00', 'DOTA 2', 'OPEN'),
+(4, 'ACT GRADUATION 2022', '2022-06-15', 'ASIAN COLLEGE OF TECHNOLOGY', '05:49:00', 'ACT GRADUATION', 'OPEN'),
+(5, 'ACT GRADUATION 2022', '2022-06-15', 'ASIAN COLLEGE OF TECHNOLOGY', '05:49:00', 'ACT GRADUATION', 'OPEN'),
+(6, 'ACT GRADUATION PRACTICE', '2022-06-16', '10TH FLOOR', '21:03:00', 'ACT PRACTICE', 'OPEN'),
+(9, 'GRADUATES RING HOP 2022', '2022-02-05', 'ACT 10TH FLOOR', '08:00:00', 'RING HOP', 'OPEN');
 
 -- --------------------------------------------------------
 
@@ -104,8 +105,8 @@ INSERT INTO `tblparticipants` (`participantId`, `eventId`, `participantName`, `p
 
 CREATE TABLE `tblparticipantsattendance` (
   `attendanceId` int(11) NOT NULL,
-  `participantId` int(11) NOT NULL,
   `eventId` int(11) NOT NULL,
+  `participantName` varchar(150) NOT NULL,
   `ClockIn` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -113,12 +114,13 @@ CREATE TABLE `tblparticipantsattendance` (
 -- Dumping data for table `tblparticipantsattendance`
 --
 
-INSERT INTO `tblparticipantsattendance` (`attendanceId`, `participantId`, `eventId`, `ClockIn`) VALUES
-(1, 1, 1, '2022-05-08 07:01:51'),
-(2, 4, 1, '2022-05-08 07:01:55'),
-(3, 5, 1, '2022-05-08 07:01:59'),
-(4, 2, 1, '2022-05-08 07:02:04'),
-(5, 1, 1, '2022-05-08 07:02:07');
+INSERT INTO `tblparticipantsattendance` (`attendanceId`, `eventId`, `participantName`, `ClockIn`) VALUES
+(1, 1, 'Eleanoir Leywin', '2022-05-15 14:37:14'),
+(2, 1, 'Seris Vritra', '2022-05-15 14:37:28'),
+(4, 2, 'Sylvia Indrath', '2022-05-15 15:15:12'),
+(5, 2, 'Sylvie Indrath', '2022-05-15 15:17:24'),
+(6, 2, 'Agrona Vritra', '2022-05-15 15:29:50'),
+(7, 4, 'JOHN DOE', '2022-05-15 15:37:02');
 
 -- --------------------------------------------------------
 
@@ -209,7 +211,7 @@ ALTER TABLE `tblparticipants`
 -- AUTO_INCREMENT for table `tblparticipantsattendance`
 --
 ALTER TABLE `tblparticipantsattendance`
-  MODIFY `attendanceId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `attendanceId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tblusers`

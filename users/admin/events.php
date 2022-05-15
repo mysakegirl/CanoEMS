@@ -19,7 +19,7 @@
             float: right !important;
         }
         .content-wrapper {
-            height: 110vh !important;
+            height: 150vh !important;
         }
 
         #v {
@@ -74,6 +74,7 @@
                                                     <th>TIME</th>
                                                     <th>VENUE</th>
                                                     <th>EVENT TITLE</th>
+                                                    <th>ATTENDANCE</th>
                                                     <th>ACTION</th>
                                                 </tr>
                                             </thead>
@@ -81,6 +82,13 @@
                                                 <?php
 
                                                 while ($row = $result->fetch_assoc()) {
+                                                    $attendanceStatusBtn = '';
+                                                    if($row['attendanceStatus'] == 'OPEN'){
+                                                        $attendanceStatusBtn = '<button class="btn btn-success attendanceBtn m-1 pt-0 pb-0"><i class="fa fa-check-circle-o"></i> OPEN</button>';
+                                                    }else{
+                                                        $attendanceStatusBtn = '<button class="btn btn-danger attendanceBtn m-1 pt-0 pb-0"><i class="fa fa-ban"> CLOSED</button>';
+                                                    }
+
                                                     echo "
                                                 <tr row-id='" . $row['event_id'] . "'>
                                                     <th scope='row'>" . $row['event_id'] . "</th>
@@ -89,14 +97,15 @@
                                                     <td ref='" . $row['time'] . "'>" . $row['time'] . "</td>
                                                     <td ref='" . $row['venue'] . "'>" . $row['venue'] . "</td>
                                                     <td ref='" . $row['event_title'] . "'>" . $row['event_title'] . "</td>
+                                                    <td ref='" . $row['attendanceStatus'] . "'>" . $attendanceStatusBtn . "</td>
                                                     <td>
-                                                        <a href='/CanoEMS/users/admin/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a>
-                                                        <a href='/CanoEMS/users/admin/attendance.php?id=" . $row['event_id'] . "' class='btn btn-success m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
+                                                        <a href='/CanoEMS/attendance.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
                                                         <a href='/CanoEMS/users/admin/report.php?id=" . $row['event_id'] . "' class='btn btn-warning text-white m-1 pt-0 pb-0'><i class='fa fa-bar-chart'></i> Report</a>
                                                     </td>
                                                 </tr>";
                                                 }
                                                 ?>
+                                                        <!-- <a href='/CanoEMS/users/admin/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a> -->
                                                         <!-- <a href='/CanoEMS/users/admin/event.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-search'></i> Info</a> -->
                                             </tbody>
                                         </table>
@@ -328,6 +337,89 @@
 
                 $('#modal').modal('show');
             })
+
+            $(document).on('click','.attendanceBtn', function(e){
+                $id = e.target.closest("tr").getAttribute("row-id");
+                $attendanceStatus = e.target.closest("tr").children[6].getAttribute("ref");
+                if($attendanceStatus == "OPEN"){
+                    data = {
+                        "attendanceStatusChange": 1,
+                        "eventId": $id,
+                        "editAttendanceStatus": "CLOSED",
+                    };
+                    Swal.fire({
+                        title: 'Are you sure you want to CLOSE the event attendance?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, close it!'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                url: "/CanoEMS/methods/eventController.php",
+                                type: 'POST',
+                                data: data,
+                                success: function(response) {
+                                    if (response.includes("Successful")) {
+                                        Swal.fire(
+                                        'Successfully Closed!',
+                                        'Event attendance has been closed.',
+                                        'success'
+                                        )
+                                        setTimeout(function() {
+                                            window.location.reload();
+                                        }, 1000)
+                                    } else {
+                                        alert(response);
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                }
+                else{
+                    data = {
+                        "attendanceStatusChange": 1,
+                        "eventId": $id,
+                        "editAttendanceStatus": "OPEN",
+                    };
+                    Swal.fire({
+                        title: 'Are you sure you want to OPEN the event attendance?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, open it!'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                url: "/CanoEMS/methods/eventController.php",
+                                type: 'POST',
+                                data: data,
+                                success: function(response) {
+                                    if (response.includes("Successful")) {
+                                        Swal.fire(
+                                        'Successfully Closed!',
+                                        'Event attendance has been closed.',
+                                        'success'
+                                        )
+                                        setTimeout(function() {
+                                            window.location.reload();
+                                        }, 1000)
+                                    } else {
+                                        alert(response);
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                }
+            });
 
 
             $(".loading").hide();
