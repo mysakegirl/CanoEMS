@@ -74,12 +74,24 @@
                                                     <th>TIME</th>
                                                     <th>VENUE</th>
                                                     <th>EVENT TITLE</th>
+                                                    <th>ATTENDANCE</th>
                                                     <th>ACTION</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php
                                                 while ($row = $result->fetch_assoc()) {
+                                                    $attendanceS = '';
+                                                    if($row['attendanceStatus'] == "OPEN"){
+                                                        $attendanceS = '<div class="alert alert-success  m-1 pt-0 pb-0 text-center" role="alert">
+                                                        OPEN
+                                                        </div>';
+                                                    }else{
+                                                        $attendanceS = '<div class="alert alert-danger  m-1 pt-0 pb-0 text-center" role="alert">
+                                                        CLOSED
+                                                      </div>';
+                                                    }
+
                                                     echo "
                                                     <tr row-id='" . $row['event_id'] . "'>
                                                     <th scope='row'>" . $row['event_id'] . "</th>
@@ -88,15 +100,16 @@
                                                     <td ref='" . $row['time'] . "'>" . $row['time'] . "</td>
                                                     <td ref='" . $row['venue'] . "'>" . $row['venue'] . "</td>
                                                     <td ref='" . $row['event_title'] . "'>" . $row['event_title'] . "</td>
+                                                    <td ref='" . $row['attendanceStatus'] . "'>" . $attendanceS . "</td>
                                                     <td>
-                                                        <a href='/CanoEMS/users/ta/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a>
-                                                        <a href='/CanoEMS/users/ta/attendance.php?id=" . $row['event_id'] . "' class='btn btn-success m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
-                                                        <a href='/CanoEMS/users/ta/report.php?id=" . $row['event_id'] . "' class='btn btn-warning text-white m-1 pt-0 pb-0'><i class='fa fa-bar-chart'></i> Report</a>
+                                                        <a href='/CanoEMS/attendance.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
                                                     </td>
                                                 </tr>";
                                                 }
 
                                                 ?>
+                                                        <!-- <a href='/CanoEMS/users/ta/report.php?id=" . $row['event_id'] . "' class='btn btn-warning text-white m-1 pt-0 pb-0'><i class='fa fa-bar-chart'></i> Report</a> -->
+                                                        <!-- <a href='/CanoEMS/users/ta/participants.php?id=" . $row['event_id'] . "' class='btn btn-primary m-1 pt-0 pb-0'><i class='fa fa-users'></i> Participants</a> -->
                                             </tbody>
                                         </table>
                                     </div>

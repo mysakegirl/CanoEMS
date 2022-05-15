@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>  
     </div>
 
     <script src="/CanoEMS/assets/js/jquery.min.js"></script>

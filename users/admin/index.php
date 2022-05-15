@@ -124,6 +124,7 @@
                                                     <td>" . $row['venue'] . "</td>
                                                     <td>
                                                     <a href='/CanoEMS/users/admin/events.php' class='btn btn-info'>More Info <i class='fa fa-info-circle'></i></a>
+                                                    <a href='/CanoEMS/attendance.php?id=" . $row['event_id'] . "' class='btn btn-primary' target='_blank'><i class='fa fa-clock-o'></i> Attendance</a>
                                                     </td>
                                                 </tr>";
                                                         }
